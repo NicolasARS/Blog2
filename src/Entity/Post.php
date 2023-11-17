@@ -155,6 +155,20 @@ class Post
         return $this;
     }
 
+    public function addLike():self
+    {
+        $this->NumLikes++;
+
+        return $this;
+    }
+
+    public function addView():self
+    {
+        $this->NumViews++;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Comment>
      */

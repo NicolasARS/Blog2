@@ -21,7 +21,15 @@ class BlogController extends AbstractController
     #[Route("/blog/buscar/{page}", name: 'blog_buscar')]
     public function buscar(ManagerRegistry $doctrine,  Request $request, int $page = 1): Response
     {
-       return new Response("Buscar");
+        $repository = $doctrine->getRepository(Post::class);
+        $searchTerm = $request->get('searchTerm') ?? "";
+        $posts = null;
+        if (!empty($searchTerm))
+            $posts = $repository->findByText($request->get('searchTerm'));
+        dump($posts);
+        exit;
+
+       return new Response("Buscar" . $request->query->get('searchTerm'));
     } 
    
     #[Route("/blog/new", name: 'new_post')]
@@ -61,7 +69,7 @@ class BlogController extends AbstractController
             $entityManager->flush();
 
             // Redirigir o mostrar una confirmación
-            return $this->redirectToRoute('blog');
+            return $this->redirectToRoute('blog', ["slug" => $post->getSlug()]);
         }
 
         return $this->render('blog/new_post.html.twig', [
@@ -72,8 +80,18 @@ class BlogController extends AbstractController
     #[Route("/single_post/{slug}/like", name: 'post_like')]
     public function like(ManagerRegistry $doctrine, $slug): Response
     {
-        return new Response("like");
-
+        $repository = $doctrine->getRepository(Post::class);
+        $post = $repository->findOneBy(['Slug' => $slug]);
+        if (!$post){
+            throw $this->createNotFoundException('El post solicitado no existe.');
+        }
+        $post->addLike()
+        ->addView();
+        $entityManager = $doctrine->getManager();
+        $entityManager->persist($post);
+        $entityManager->flush();
+        
+        return $this->redirectToRoute('single_post', ["slug" => $post->getSlug()]);
     }
 
     #[Route("/blog", name: 'blog')]

@@ -17,7 +17,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class AdminController extends AbstractController
 {
     
-    #[Route("/admin/images", name: 'app_images')]
+    #[Route("/admin/images/add", name: 'add_images')]
     public function images(ManagerRegistry $doctrine, Request $request, SluggerInterface $slugger): Response
     {
         
@@ -59,13 +59,37 @@ class AdminController extends AbstractController
             $entityManager = $doctrine->getManager();    
             $entityManager->persist($image);
             $entityManager->flush();
+            return $this->redirectToRoute('app_images', []);
         }
         return $this->render('admin/images.html.twig', array(
             'form' => $form->createView(),
             'images' => $images   
         ));
 
-        
+    }
+
+    #[Route("/admin/images", name: 'app_images')]
+    public function addImages(ManagerRegistry $doctrine): Response
+    {
+        $repository = $doctrine->getRepository(Image::class);
+        $images = $repository->findAll();
+
+        return $this->render('admin/addImages.html.twig', array(
+            'images' => $images
+        ));
+    }
+
+    #[Route('/admin/images/delete/{id}', name: 'delete_image')]
+    public function deleteImage(ManagerRegistry $doctrine, $id): Response{
+        $entityManager = $doctrine->getManager();
+        $repositorio = $doctrine->getRepository(Image::class);
+        $image = $repositorio->find($id);
+        if ($image){
+                $entityManager->remove($image);
+                $entityManager->flush();
+                return $this->redirectToRoute('app_images', []);
+        }else
+            return $this->render('images.html.twig', ['image' => null] ,);
     }
 
     #[Route("/admin/categories", name: 'app_categories')]
@@ -84,11 +108,34 @@ class AdminController extends AbstractController
             $entityManager = $doctrine->getManager();    
             $entityManager->persist($category);
             $entityManager->flush();
+            return $this->redirectToRoute('app_categories', []);
         }
         return $this->render('admin/categories.html.twig', array(
             'form' => $form->createView(),
             'categories' => $categories   
         ));
+    }
 
+    #[Route('/admin/categories/delete/{id}', name: 'delete_category')]
+    public function deleteCategory(ManagerRegistry $doctrine, $id): Response{
+        $entityManager = $doctrine->getManager();
+        $repositorio = $doctrine->getRepository(Category::class);
+        $category = $repositorio->find($id);
+        if ($category){
+                $entityManager->remove($category);
+                $entityManager->flush();
+                return $this->redirectToRoute('app_categories', []);
+        }else
+            return $this->render('admin/categories.html.twig', ['category' => null]);
+    }
+
+    public function adminDashboard(): Response
+    {
+    $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+    // or add an optional message - seen by developers
+    $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User tried to access a page without having ROLE_ADMIN');
+    
+    new Response("Sí que puedes entrar");
     }
 }
