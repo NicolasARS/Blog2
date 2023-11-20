@@ -61,7 +61,7 @@ class AdminController extends AbstractController
             $entityManager->flush();
             return $this->redirectToRoute('app_images', []);
         }
-        return $this->render('admin/images.html.twig', array(
+        return $this->render('admin/addImages.html.twig', array(
             'form' => $form->createView(),
             'images' => $images   
         ));
@@ -74,7 +74,7 @@ class AdminController extends AbstractController
         $repository = $doctrine->getRepository(Image::class);
         $images = $repository->findAll();
 
-        return $this->render('admin/addImages.html.twig', array(
+        return $this->render('admin/Images.html.twig', array(
             'images' => $images
         ));
     }

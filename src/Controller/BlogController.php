@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use Symfony\Component\Filesystem\Filesystem;
 use App\Entity\Comment;
 use App\Entity\Post;
@@ -97,11 +98,14 @@ class BlogController extends AbstractController
     #[Route("/blog", name: 'blog')]
     public function index(ManagerRegistry $doctrine): Response
     {
-        $repository = $doctrine->getRepository(Post::class);
-        $posts = $repository->findAll();
+        $repositoryPosts = $doctrine->getRepository(Post::class);
+        $posts = $repositoryPosts->findAll();
+        $repositoryCategories = $doctrine->getRepository(Category::class);
+        $categories = $repositoryCategories->findAll();
         
         return $this->render('blog/blog.html.twig', [
             'posts' => $posts,
+            'categories' => $categories
         ]);
     }
 
