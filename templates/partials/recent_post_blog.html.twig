@@ -1,13 +1,13 @@
 <div class="post">
-               <div class="post-heading">
-                 <span>{{ recent.publishedAt | date('d') }} {{ recent.publishedAt | date('F') }}</span>
-                 <img class="img-responsive" src="{{asset('images/blog/' ~ recent.image)}}" alt="post's picture">
-               </div>
-               <div class="post-body">
-                 <span>
-                 <i class="fa fa-heart sr-icons" data-sr-id="17" style="; visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; "></i> {{recent.numLikes}}
-                 <i class="fa fa-comments sr-icons" data-sr-id="18" style="; visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; "></i> {{recent.numComments}}
-                 </span>
-                 <h4 class="text-left"><a href="{{path('single_post', {'slug' : recent.slug })}}"><strong>{{recent.title}}</strong></a></h4>
-               </div>
-             </div>
+  <div class="post-heading">
+    <span>{{ recent.publishedAt | date('d') }} {{ recent.publishedAt | date('F') }}</span>
+    <img class="img-responsive" src="{{asset('images/blog/' ~ recent.image)}}" alt="post's picture">
+  </div>
+  <div class="post-body">
+    <span>
+    <i class="fa fa-heart sr-icons" data-sr-id="17" style="; visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; "></i> {{recent.numLikes}}
+    <i class="fa fa-comments sr-icons" data-sr-id="18" style="; visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; "></i> {{recent.numComments}}
+    </span>
+    <h4 class="text-left"><a href="{{path('single_post', {'slug' : recent.slug })}}"><strong>{{recent.title}}</strong></a></h4>
+  </div>
+</div>

@@ -62,6 +62,17 @@ class PostRepository extends ServiceEntityRepository
 
     }
 
+    public function findByTitle(string $searchTerm)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere("p.Title LIKE :val")
+            ->setParameter('val', '%'.$searchTerm.'%')
+            ->orderBy('p.PublishedAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+    }
+
     public function findByTextPaginated(int $page, string $searchTerm)
     {
         $qb = $this->createQueryBuilder('p')

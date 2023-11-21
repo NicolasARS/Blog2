@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\String\Slugger\SluggerInterface;
 class AdminController extends AbstractController
 {
-    
+
     #[Route("/admin/images/add", name: 'add_images')]
     public function images(ManagerRegistry $doctrine, Request $request, SluggerInterface $slugger): Response
     {
@@ -74,7 +74,7 @@ class AdminController extends AbstractController
         $repository = $doctrine->getRepository(Image::class);
         $images = $repository->findAll();
 
-        return $this->render('admin/Images.html.twig', array(
+        return $this->render('admin/images.html.twig', array(
             'images' => $images
         ));
     }
@@ -127,6 +127,12 @@ class AdminController extends AbstractController
                 return $this->redirectToRoute('app_categories', []);
         }else
             return $this->render('admin/categories.html.twig', ['category' => null]);
+    }
+
+    #[Route("/admin", name: 'admin')]
+    public function admin(ManagerRegistry $doctrine): Response
+    {
+        return $this->render('admin/admin.html.twig');
     }
 
     public function adminDashboard(): Response

@@ -60,11 +60,10 @@
              <div class="panel-heading">
                <h4>Categories</h4>
              </div>
-             <div class="panel-body">
+             
              {% if categories %}
-             {% for category in categories %}
+             <div class="panel-body">
               {{ include ('partials/categories.html.twig')}}
-             {% endfor %}
              {% endif %}
              </div>
            </div>

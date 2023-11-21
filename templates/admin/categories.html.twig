@@ -6,7 +6,8 @@
    	  <div class="container">
    	    <div class="col-xs-12 col-sm-8 col-sm-push-2">
        	   <h1>Categories</h1>
-       	   <hr>
+       	   <hr class="divider">
+		   <h4>Add new category</h4><br>
 			  {{ form(form, {'attr': {'class':'form-horizontal'}}) }}
 			<hr class="divider">
 			<div>
@@ -27,7 +28,7 @@
 						</td>
 						<td>
 						{% if is_granted('ROLE_ADMIN') %}
-							<button href="{{ path('delete_category', {'id' :  category.id})}}" class="btn">Delete Category</button>
+							<button class="btn sr-button"><a href="{{ path('delete_category', {'id' :  category.id})}}">Delete Category</a></button>
 						</td>
 						{% endif %}
 					</tr>

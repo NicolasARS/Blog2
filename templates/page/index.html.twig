@@ -25,7 +25,7 @@
             <thead>
               <tr>
               {% for category in categories %}
-                <td><a class="link {{loop.first ? 'active' : ''}}" href="#category{{category.id}}" data-toggle="tab">{{category.name}}</a></td>
+                <td><a class="link {{loop.first ? 'active' : ''}}" href="#category{{category.id}}" data-toggle="tab" id="{{category.id}}">{{category.name}}</a></td>
               {% endfor %}
               </tr>
             </thead>

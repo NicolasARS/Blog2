@@ -38,13 +38,13 @@
 							{{ image.numDownloads }}
 						</td>		
 						<td>
-							{{ image.category.name }}
+							<a class="btn sr-button" href="{{path('app_categories')}}">{{ image.category.name }}</a>
 						</td>
                         <td>
                         {% if is_granted('ROLE_ADMIN') %}
 	    	                 <button class="btn sr-button"><a href="{{ path('delete_image', {'id' :  image.id})}}">Delete Image</a></button>
-			            </td>
-                        {% endif %}					
+			            {% endif %}	
+						</td> 				
 					</tr>
 					{% endfor %}
 					</tbody>
