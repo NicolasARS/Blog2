@@ -37,6 +37,7 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: /blog/new, roles: ROLE_USER }
+        - { path: post_like, roles: ROLE_USER }
 
 when@test:
     security:

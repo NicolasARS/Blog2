@@ -26,7 +26,7 @@ class BlogController extends AbstractController
     {
     $repository = $doctrine->getRepository(Post::class);
     $searchTerm = $request->query->get('searchTerm', '');
-    $posts = $repository->findByTitle($searchTerm);
+    $posts = $repository->findByText($searchTerm);
     $recents = $repository->findRecents();
     $repositoryCategories = $doctrine->getRepository(Category::class);
     $categories = $repositoryCategories->findAll();
@@ -93,8 +93,11 @@ class BlogController extends AbstractController
     if (!$post) {
         throw $this->createNotFoundException('El post solicitado no existe.');
     }
-
+    
     $user = $security->getUser();
+    if (!$user) {
+        throw $this->createAccessDeniedException('You must be logged in to like.');
+    }
 
     // Verificar si el usuario ya ha dado "like"
     $likeRepo = $doctrine->getRepository(Like::class);
@@ -117,22 +120,25 @@ class BlogController extends AbstractController
     return $this->redirectToRoute('single_post', ["slug" => $post->getSlug()]);
 }
 
-    #[Route("/blog", name: 'blog')]
-    public function index(ManagerRegistry $doctrine): Response
+    #[Route("/blog/{page}", name: 'blog')]
+    public function index(ManagerRegistry $doctrine, int $page = 1): Response
     {
         $repositoryPosts = $doctrine->getRepository(Post::class);
         $posts = $repositoryPosts->findAll();
         $repositoryCategories = $doctrine->getRepository(Category::class);
+        $recents = $repositoryPosts->findRecents();
         $categories = $repositoryCategories->findAll();
+        $posts = $repositoryPosts->findAllPaginated($page);
         
         return $this->render('blog/blog.html.twig', [
             'posts' => $posts,
+            'recents' => $recents,
             'categories' => $categories
         ]);
     }
 
     #[Route("/single_post/{slug}", name: 'single_post')]
-    public function post(ManagerRegistry $doctrine, Request $request, $slug = 'cambiar', ): Response
+    public function post(ManagerRegistry $doctrine, Request $request, Security $security, $slug = 'cambiar',): Response
     {
         $repository = $doctrine->getRepository(Post::class);
         $post = $repository->findOneBy(['Slug' => $slug]);
@@ -144,16 +150,22 @@ class BlogController extends AbstractController
         $comment = new Comment();
         $commentRepo = $doctrine->getRepository(Comment::class);
         $comments = $commentRepo->findBy(['post' => $post]);
+
         $recentsRepo = $doctrine->getRepository(Post::class);
         $recents = $recentsRepo->findAll();
         $form = $this->createForm(CommentFormType::class, $comment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
+            $user = $security->getUser();
+            if (!$user) {
+            throw $this->createAccessDeniedException('You must be logged in to like.');
+            }
             $comment->setPost($post);
-            
+            $post->addComment2();
             $entityManager = $doctrine->getManager();
             $entityManager->persist($comment);
+            $entityManager->persist($post);
             $entityManager->flush();
         }
         return $this->render('blog/single_post.html.twig', [
@@ -163,5 +175,6 @@ class BlogController extends AbstractController
             'commentForm' => $form->createView()
         ]);
     }
+    
 
 }

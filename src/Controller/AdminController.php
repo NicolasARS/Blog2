@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Symfony\Component\Filesystem\Filesystem;
 use App\Entity\Category;
 use App\Entity\Image;
@@ -134,6 +135,31 @@ class AdminController extends AbstractController
     {
         return $this->render('admin/admin.html.twig');
     }
+
+    #[Route("/admin/users", name: 'users')]
+    public function users(ManagerRegistry $doctrine): Response
+    {
+        $repository = $doctrine->getRepository(User::class);
+        $users = $repository->findAll();
+
+        return $this->render('admin/users.html.twig', array(
+            'users' => $users
+        ));
+    }
+
+    #[Route('/admin/users/delete/{id}', name: 'delete_user')]
+    public function deleteUser(ManagerRegistry $doctrine, $id): Response{
+        $entityManager = $doctrine->getManager();
+        $repositorio = $doctrine->getRepository(User::class);
+        $user = $repositorio->find($id);
+        if ($user){
+                $entityManager->remove($user);
+                $entityManager->flush();
+                return $this->redirectToRoute('users');
+        }else
+            return $this->render('admin/users.html.twig', ['user' => null]);
+    }
+
 
     public function adminDashboard(): Response
     {

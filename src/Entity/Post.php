@@ -191,6 +191,13 @@ class Post
         return $this;
     }
 
+    public function addComment2():self
+    {
+        $this->NumComments++;
+
+        return $this;
+    }
+
     public function removeComment(Comment $comment): static
     {
         if ($this->comments->removeElement($comment)) {
